@@ -16,6 +16,7 @@ OPTIONS:
 	nomove		do not move images after processing (default: move)
 	lastphoto=xxxx	begin sequence with the provided 4-digit (>=1000) number 
 	noincrement	do not increment the image sequence number (default: increment)
+	doubleprint	generate the double print (adds time, default: no doubleprint)
 
 DESCRIPTION:
 	This python script implements a photo booth where a sequence of four images is 
@@ -32,6 +33,11 @@ if 'nousecamera' in sys.argv:
 	camera_arg=False
 else:
 	camera_arg=True
+
+if 'doubleprint' in sys.argv:
+	doubleprint=True
+else:
+	doubleprint=False
 
 # move the files when done? Assume true...
 move=True
@@ -57,7 +63,7 @@ if temp not in ['']:
 
 # increment output photo index? default is true...
 increment=True
-if 'noincrement' in i:
+if 'noincrement' in sys.argv:
 	increment = False
 #=============================================================================
 # ===================== DONE COMMAND LINE ARGUMENTS ==========================
@@ -74,6 +80,7 @@ print 'nousecamera:', repr(camera_arg)
 print 'nomove:', repr(move)
 print 'lastphoto:', last
 print 'increment:', repr(increment)
+print 'doubleprint:', repr(doubleprint)
 
 pygame.init()
 screen = pygame.display.set_mode(size)
@@ -95,14 +102,14 @@ while (1):
 	start = time.time()
 	
 	# get a new filename and print it to the console...
-	filename= new_filename()
+	filename= new_filename(increment=increment)
 	print '\r\nnew filename:', filename
 
 	# prime threads for compositing images...
 	t_ = []
 	t_.append( threading.Thread(target=generate_composite, args=('display', filename)) )
-	t_.append( threading.Thread(target=generate_composite, args=('phone', filename)) )
-	# t_.append( threading.Thread(target=generate_print, args=('phone', filename)) )
+	if not(doubleprint): t_.append( threading.Thread(target=generate_composite, args=('phone', filename)) )
+	else: t_.append( threading.Thread(target=generate_print, args=('phone', filename)) )
 	# start the queued threads...
 	for i in t_: i.start()
 
@@ -112,24 +119,33 @@ while (1):
 		time.sleep(1.0)
 		print 
 		print 'Grabbing image: ', i+1
+		fillscreen(screen, black)
 		grab_image(filename, i, camera_arg)
 		displayimage(screen, filename+'_'+suffix[i]+'.jpg', camerasize, cameraloc)
 		time.sleep(3)
 
 	# wait until all compositing threads are complete...
 	living=True
+	displayed=False
 	while ( living ):# or t_print.isAlive() ): 
 		living=False
-		fillscreen(screen, black)
-		time.sleep(1)
-		showtext(screen, 'Processing...', 100)
-		time.sleep(1)
+		if not displayed: 
+			fillscreen(screen, black)
+			time.sleep(1)
+			showtext(screen, 'Processing...', 100)
+			time.sleep(1)
+		else: time.sleep(2)
 		print '    ===> still processing...'	
 		for i in t_: 
 			if i.isAlive(): living=True
+		if not(t_[0].isAlive()) and not(displayed):
+			displayed=True
+			print 'time to display:', time.time()-start
+			displayimage(screen, filename+'_display.jpg', size)
 
-	displayimage(screen, filename+'_display.jpg', size)
-	time.sleep(5)
+
+#	displayimage(screen, filename+'_display.jpg', size)
+	time.sleep(1)
 
 	# clean up the temporary files generated during compositing...
 	cleanup_temp_files(filename)
