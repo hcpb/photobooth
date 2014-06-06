@@ -1,4 +1,4 @@
-#!/usr/bin/python
+ #!/usr/bin/python
 # many dependencies are all brought in with this import...
 from photoboothlib import *
 
@@ -17,6 +17,8 @@ OPTIONS:
 	lastphoto=xxxx	begin sequence with the provided 4-digit (>=1000) number 
 	noincrement	do not increment the image sequence number (default: increment)
 	doubleprint	generate the double print (adds time, default: no doubleprint)
+	sepia		do composites in sepia tone
+	bw		do composites in black and white
 
 DESCRIPTION:
 	This python script implements a photo booth where a sequence of four images is 
@@ -38,6 +40,13 @@ if 'doubleprint' in sys.argv:
 	doubleprint=True
 else:
 	doubleprint=False
+
+# use sepia tone...
+tone = ''
+if 'sepia' in sys.argv and not('bw' in sys.argv):
+	tone = '-sepia'
+if 'bw' in sys.argv and not('sepia' in sys.argv):
+	tone='-bw'
 
 # move the files when done? Assume true...
 move=True
@@ -91,7 +100,12 @@ while (1):
 	# wait for key push.
 	# bb = raw_input('\r\nHit return to continue...')
 	showtext(screen, "Push any button", 100)
-	waitforkey([K_g, K_r, K_y])
+
+	key = waitforkey([K_g, K_r, K_y])
+	if key == K_y: tone='-sepia'
+	if key == K_r: tone='-bw'
+	if key == K_g: tone =''
+
 	fillscreen(screen, black)
 
 	showtext(screen, "Four photos will be taken", 75)
@@ -107,9 +121,9 @@ while (1):
 
 	# prime threads for compositing images...
 	t_ = []
-	t_.append( threading.Thread(target=generate_composite, args=('display', filename)) )
-	if not(doubleprint): t_.append( threading.Thread(target=generate_composite, args=('phone', filename)) )
-	else: t_.append( threading.Thread(target=generate_print, args=('phone', filename)) )
+	t_.append( threading.Thread(target=generate_composite, args=('display'+tone, filename)) )
+	if not(doubleprint): t_.append( threading.Thread(target=generate_composite, args=('phone'+tone, filename)) )
+	else: t_.append( threading.Thread(target=generate_print, args=('phone'+tone, filename)) )
 	# start the queued threads...
 	for i in t_: i.start()
 
@@ -141,10 +155,8 @@ while (1):
 		if not(t_[0].isAlive()) and not(displayed):
 			displayed=True
 			print 'time to display:', time.time()-start
-			displayimage(screen, filename+'_display.jpg', size)
+			displayimage(screen, filename+'_display'+tone+'.jpg', size)
 
-
-#	displayimage(screen, filename+'_display.jpg', size)
 	time.sleep(1)
 
 	# clean up the temporary files generated during compositing...

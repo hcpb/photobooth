@@ -30,21 +30,64 @@ templates = {'display':[ ['504x336', '+124+12', 'images/backscreen-hd.jpg', 'bou
 			['504x336', '+124+373', 'boutput.jpg', 'boutput.jpg'],
 			['504x336', '+652+12', 'boutput.jpg', 'boutput.jpg'],
 			['504x336', '+652+373', 'boutput.jpg', 'boutput.jpg'],
-			['+522+243', 'x233', 'images/overlay-disp.png', 'boutput.jpg'] ],
+			['+522+243', 'x233', 'images/overlay-disp.png', 'boutput.jpg'], 
+			'gm composite -resize &ARG1 -geometry &ARG2 &FILENAME_&I.jpg &ARG3 -quality 98 &ARG4 ',
+			'gm composite -geometry &ARG1 -resize &ARG2 &ARG3 &ARG4 -quality 95 &FILENAME_&TEMPLATE.jpg '
+			],
 
 	      'phone':[ ['1756x1164', '+120+996', 'images/background-half-big.jpg', 'output.jpg'],
 			['1756x1164', '+120+2248', 'output.jpg', 'output.jpg'],
 			['1756x1164', '+120+3500', 'output.jpg', 'output.jpg'],
 			['1756x1164', '+120+4752', 'output.jpg', 'output.jpg'],
-			['+250+50', '1500x', 'images/overlay-phone.png', 'output.jpg'] ]
-		}	
+			['+250+50', '1500x', 'images/overlay-phone.png', 'output.jpg'], 
+			'gm composite -resize &ARG1 -geometry &ARG2 &FILENAME_&I.jpg &ARG3 -quality 98 &ARG4 ',
+			'gm composite -geometry &ARG1 -resize &ARG2 &ARG3 &ARG4 -quality 95 &FILENAME_&TEMPLATE.jpg '
+			],
+
+	    'display-sepia':[ ['504x336', '+124+12', 'images/backscreen-hd.jpg', 'boutput.jpg'],
+			['504x336', '+124+373', 'boutput.jpg', 'boutput.jpg'],
+			['504x336', '+652+12', 'boutput.jpg', 'boutput.jpg'],
+			['504x336', '+652+373', 'boutput.jpg', 'boutput.jpg'],
+			['+522+243', 'x233', 'images/overlay-disp.png', 'boutput.jpg'], 
+			'gm convert -resize &ARG1 &FILENAME_&I.jpg -modulate 115,0,100 -colorize 7,21,50 coloroutput.jpg; gm composite -geometry &ARG2 coloroutput.jpg &ARG3 -quality 98 &ARG4 ',
+			'gm composite -geometry &ARG1 -resize &ARG2 &ARG3 &ARG4 -quality 95 &FILENAME_&TEMPLATE.jpg '
+			],
+
+	      'phone-sepia':[ ['1756x1164', '+120+996', 'images/background-half-big.jpg', 'output.jpg'],
+			['1756x1164', '+120+2248', 'output.jpg', 'output.jpg'],
+			['1756x1164', '+120+3500', 'output.jpg', 'output.jpg'],
+			['1756x1164', '+120+4752', 'output.jpg', 'output.jpg'],
+			['+250+50', '1500x', 'images/overlay-phone.png', 'output.jpg'], 
+			'gm convert -resize &ARG1 &FILENAME_&I.jpg -modulate 115,0,100 -colorize 7,21,50 coloroutput.jpg; gm composite -geometry &ARG2 coloroutput.jpg &ARG3 -quality 98 &ARG4 ',
+			'gm composite -geometry &ARG1 -resize &ARG2 &ARG3 &ARG4 -quality 95 &FILENAME_&TEMPLATE.jpg '
+			],
+
+	    'display-bw':[ ['504x336', '+124+12', 'images/backscreen-hd.jpg', 'boutput.jpg'],
+			['504x336', '+124+373', 'boutput.jpg', 'boutput.jpg'],
+			['504x336', '+652+12', 'boutput.jpg', 'boutput.jpg'],
+			['504x336', '+652+373', 'boutput.jpg', 'boutput.jpg'],
+			['+522+243', 'x233', 'images/overlay-disp.png', 'boutput.jpg'], 
+			'gm convert -resize &ARG1 &FILENAME_&I.jpg -colorspace GRAY coloroutput.jpg; gm composite -geometry &ARG2 coloroutput.jpg &ARG3 -quality 98 &ARG4 ',
+			'gm composite -geometry &ARG1 -resize &ARG2 &ARG3 &ARG4 -quality 95 &FILENAME_&TEMPLATE.jpg '
+			],
+
+	      'phone-bw':[ ['1756x1164', '+120+996', 'images/background-half-big.jpg', 'output.jpg'],
+			['1756x1164', '+120+2248', 'output.jpg', 'output.jpg'],
+			['1756x1164', '+120+3500', 'output.jpg', 'output.jpg'],
+			['1756x1164', '+120+4752', 'output.jpg', 'output.jpg'],
+			['+250+50', '1500x', 'images/overlay-phone.png', 'output.jpg'], 
+			'gm convert -resize &ARG1 &FILENAME_&I.jpg -colorspace GRAY coloroutput.jpg; gm composite -geometry &ARG2 coloroutput.jpg &ARG3 -quality 98 &ARG4 ',
+			'gm composite -geometry &ARG1 -resize &ARG2 &ARG3 &ARG4 -quality 95 &FILENAME_&TEMPLATE.jpg '
+			]
+		}
 
 # generate a composite image from a template, horizontal or vertical, abstracted 
 #    and genericized so that various combinations of templates can be created...
 def generate_composite(template, filename, blocking=True, generateprint=False):
 	# base graphicsmagick commands to generate composites...
-	interrim = 'gm composite -resize &ARG1 -geometry &ARG2 &FILENAME_&I.jpg &ARG3 -quality 98 &ARG4 '
-	ending = 'gm composite -geometry &ARG1 -resize &ARG2 &ARG3 &ARG4 -quality 95 &FILENAME_&TEMPLATE.jpg '
+#	interrim = 'gm composite -resize &ARG1 -geometry &ARG2 &FILENAME_&I.jpg &ARG3 -quality 98 &ARG4 '
+	interrim = templates[template][-2]
+	ending = templates[template][-1]
 	
 	# generate interrim commands...
 	for i in range(1,5):
@@ -140,7 +183,7 @@ def waitforkey(key, quitable = True):
 			if event.type == QUIT: sys.exit()
 			elif event.type == KEYDOWN: 
 				#print 'keydown...'
-				if event.key in key: return
+				if event.key in key: return event.key
 				if quitable and event.key == K_q: sys.exit()
 	pygame.event.clear()
 
