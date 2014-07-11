@@ -99,7 +99,7 @@ while (1):
 
 	# wait for key push.
 	# bb = raw_input('\r\nHit return to continue...')
-	showtext(screen, "Push any button", 100)
+	showtext(screen, "Push a button to start", 100)
 
 	key = waitforkey([K_g, K_r, K_y])
 	if key == K_y: tone='-sepia'
@@ -108,9 +108,9 @@ while (1):
 
 	fillscreen(screen, black)
 
-	showtext(screen, "Four photos will be taken", 75)
-	time.sleep(2.5)
-	fillscreen(screen, black)
+#	showtext(screen, "Four photos will be taken", 75)
+#	time.sleep(2.5)
+#	fillscreen(screen, black)
 
 	# keep track of the starting time for some statistics...
 	start = time.time()
@@ -128,29 +128,38 @@ while (1):
 
 	# grab the sequence of images from the camera (or, if specified, dummy images)...
 	for i in range(4):
-		showtext(screen, 'Image: '+str(4-i), 100)
+		showtext(screen, 'Image: '+str(i+1), 100)
 		time.sleep(1.0)
 		print 
 		print 'Grabbing image: ', i+1
 		fillscreen(screen, black)
 		grab_image2(filename, i, camera_arg)
+
+		# display image just taken
 		displayimage(screen, filename+'_'+suffix[i]+'.jpg', camerasize, cameraloc)
-		time.sleep(3)
+		#time.sleep(3)
+
 		# assemble incremental composite...
 		bb =  Image.open(filename+'_'+suffix[i] + '.jpg')
 		print bb.size
 		imDisplay.paste(bb.resize( (504, 336), Image.ANTIALIAS), dispbox[i])
 		imPrint.paste(bb.resize( (1756, 1164), Image.ANTIALIAS), printbox[i])
 
+	showtext(screen, 'Processing...', 100)
 	# add emblems to composites...
 	tmp = Image.open('images/overlay-disp.png').resize( (233, 233), Image.ANTIALIAS )
 	print tmp.size, tmp.mode
 	imDisplay.paste( tmp, (522, 243, 755, 476), mask=tmp )
+	# save display composite...
+	imDisplay.save(filename+'_display.jpg', 'JPEG', quality=98)
+
+	# throw up completed display image while finishing up print images...
+	displayimage(screen, filename+'_display.jpg', size)
+
+	# save single print composite...
 	tmp = Image.open('images/overlay-phone.png').resize( (1500, 941), Image.ANTIALIAS )
 	print tmp.size, tmp.mode
 	imPrint.paste( tmp, (250, 50, 1750, 991), mask=tmp )
-	# save composites...
-	imDisplay.save(filename+'_display.jpg', 'JPEG', quality=98)
 	imPrint.save(filename+'_phone.jpg', 'JPEG', quality=90)
 	imDouble = Image.new('RGB', (4000, 6000), 'white')
 	# generate double strip for printing...
@@ -161,15 +170,15 @@ while (1):
 	del draw
 	imDouble.save(filename+'_print.jpg', 'JPEG', quality=90)
 
+	print '\r\nProcessing done: ', time.time()-start
 
-
-	time.sleep(1)
+	time.sleep(8)
 
 	# clean up the temporary files generated during compositing...
 	cleanup_temp_files(filename)
 
 	# print elapsed time to console...
-	print '\r\nDone: ', time.time()-start
+	print '\r\nTotal cycle time: ', time.time()-start
 
 
 
