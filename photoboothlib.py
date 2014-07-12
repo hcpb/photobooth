@@ -144,7 +144,8 @@ def grab_image(filename, i, usecamera=True):
 			C = piggyphoto.camera() 
 			C.capture_image(filename+'_'+suffix[i] + '.jpg')
 		else: shellcmd('cp images/DSCdummy'+str(i+1)+'.jpg '+filename+'_'+suffix[i] + '.jpg')
-	open(filename+'_'+suffix[i]+'_done', 'w').write('done') # flag that file is complete...
+	# create flag file indicating that photo file download from camera completed...
+	open(filename+'_'+suffix[i]+'_done', 'w').write('done') 
 
 
 # move files into local subdirectories and SAMBA share at path

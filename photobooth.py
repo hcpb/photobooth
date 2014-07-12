@@ -86,7 +86,7 @@ if 'noincrement' in sys.argv:
 
 # verify command line args...
 print 'nousecamera:', repr(camera_arg)
-print 'nomove:', repr(move)
+print 'nomove:', repr(not(move))
 print 'lastphoto:', last
 print 'increment:', repr(increment)
 print 'doubleprint:', repr(doubleprint)
@@ -99,7 +99,7 @@ while (1):
 
 	# wait for key push.
 	# bb = raw_input('\r\nHit return to continue...')
-	showtext(screen, "Push any button", 100)
+	showtext(screen, "Push a button to start", 100)
 
 	key = waitforkey([K_g, K_r, K_y])
 	if key == K_y: tone='-sepia'
@@ -108,9 +108,9 @@ while (1):
 
 	fillscreen(screen, black)
 
-	showtext(screen, "Four photos will be taken", 75)
-	time.sleep(2.5)
-	fillscreen(screen, black)
+#	showtext(screen, "Four photos will be taken", 75)
+#	time.sleep(2.5)
+#	fillscreen(screen, black)
 
 	# keep track of the starting time for some statistics...
 	start = time.time()
@@ -129,13 +129,14 @@ while (1):
 
 	# grab the sequence of images from the camera (or, if specified, dummy images)...
 	for i in range(4):
-		showtext(screen, 'Image: '+str(4-i), 100)
-		time.sleep(1.0)
+		showtext(screen, 'Image: '+str(i+1), 100)
+		time.sleep(0.5)
 		print 
 		print 'Grabbing image: ', i+1
 		fillscreen(screen, black)
 		grab_image(filename, i, camera_arg)
 		displayimage(screen, filename+'_'+suffix[i]+'.jpg', camerasize, cameraloc)
+		print 'time to display:', time.time()-start
 		time.sleep(3)
 
 	# wait until all compositing threads are complete...
@@ -145,10 +146,10 @@ while (1):
 		living=False
 		if not displayed: 
 			fillscreen(screen, black)
-			time.sleep(1)
+			time.sleep(0.5)
 			showtext(screen, 'Processing...', 100)
-			time.sleep(1)
-		else: time.sleep(2)
+			time.sleep(0.5)
+		else: time.sleep(1)
 		print '    ===> still processing...'	
 		for i in t_: 
 			if i.isAlive(): living=True
@@ -161,6 +162,12 @@ while (1):
 
 	# clean up the temporary files generated during compositing...
 	cleanup_temp_files(filename)
+
+	# move files (default) to redundant locations...
+	if move:
+		move_files(filename, path='/media/files-n-stuff/', copy=True)
+		move_files(filename, path='/media/backup/', copy=True)
+		move_files(filename, path='/media/PHOTOBOOTH/', copy=False)
 
 	# print elapsed time to console...
 	print '\r\nDone: ', time.time()-start
