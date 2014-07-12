@@ -1,4 +1,4 @@
- #!/usr/bin/python
+#!/usr/bin/python
 # many dependencies are all brought in with this import...
 from photoboothlib import *
 
@@ -99,7 +99,7 @@ while (1):
 
 	# wait for key push.
 	# bb = raw_input('\r\nHit return to continue...')
-	showtext(screen, "Push a button to start", 100)
+	showtext(screen, "Push any button", 100)
 
 	key = waitforkey([K_g, K_r, K_y])
 	if key == K_y: tone='-sepia'
@@ -108,9 +108,9 @@ while (1):
 
 	fillscreen(screen, black)
 
-#	showtext(screen, "Four photos will be taken", 75)
-#	time.sleep(2.5)
-#	fillscreen(screen, black)
+	showtext(screen, "Four photos will be taken", 75)
+	time.sleep(2.5)
+	fillscreen(screen, black)
 
 	# keep track of the starting time for some statistics...
 	start = time.time()
@@ -119,66 +119,52 @@ while (1):
 	filename= new_filename(increment=increment)
 	print '\r\nnew filename:', filename
 
-	# *** for PIL instead of graphicsmagick... ***
-	imDisplay = Image.new('RGBA', (1280, 720), 'white')
-	imPrint = Image.new('RGBA', (2000, 6000), 'white')
-	dispbox = [ (124, 12, 628, 348), (124, 373, 628, 709), (652, 12, 1156, 348), (652, 373, 1156, 709) ]
-	printbox= [ (120, 996, 1876, 2160), (120, 2248, 1876, 3412), (120, 3500, 1876, 4664), (120, 4752, 1876, 5916) ]
-	# ****************************
+	# prime threads for compositing images...
+	t_ = []
+	t_.append( threading.Thread(target=generate_composite, args=('display'+tone, filename)) )
+	if not(doubleprint): t_.append( threading.Thread(target=generate_composite, args=('phone'+tone, filename)) )
+	else: t_.append( threading.Thread(target=generate_print, args=('phone'+tone, filename)) )
+	# start the queued threads...
+	for i in t_: i.start()
 
 	# grab the sequence of images from the camera (or, if specified, dummy images)...
 	for i in range(4):
-		showtext(screen, 'Image: '+str(i+1), 100)
+		showtext(screen, 'Image: '+str(4-i), 100)
 		time.sleep(1.0)
 		print 
 		print 'Grabbing image: ', i+1
 		fillscreen(screen, black)
-		grab_image2(filename, i, camera_arg)
-
-		# display image just taken
+		grab_image(filename, i, camera_arg)
 		displayimage(screen, filename+'_'+suffix[i]+'.jpg', camerasize, cameraloc)
-		#time.sleep(3)
+		time.sleep(3)
 
-		# assemble incremental composite...
-		bb =  Image.open(filename+'_'+suffix[i] + '.jpg')
-		print bb.size
-		imDisplay.paste(bb.resize( (504, 336), Image.ANTIALIAS), dispbox[i])
-		imPrint.paste(bb.resize( (1756, 1164), Image.ANTIALIAS), printbox[i])
+	# wait until all compositing threads are complete...
+	living=True
+	displayed=False
+	while ( living ):# or t_print.isAlive() ): 
+		living=False
+		if not displayed: 
+			fillscreen(screen, black)
+			time.sleep(1)
+			showtext(screen, 'Processing...', 100)
+			time.sleep(1)
+		else: time.sleep(2)
+		print '    ===> still processing...'	
+		for i in t_: 
+			if i.isAlive(): living=True
+		if not(t_[0].isAlive()) and not(displayed):
+			displayed=True
+			print 'time to display:', time.time()-start
+			displayimage(screen, filename+'_display'+tone+'.jpg', size)
 
-	showtext(screen, 'Processing...', 100)
-	# add emblems to composites...
-	tmp = Image.open('images/overlay-disp.png').resize( (233, 233), Image.ANTIALIAS )
-	print tmp.size, tmp.mode
-	imDisplay.paste( tmp, (522, 243, 755, 476), mask=tmp )
-	# save display composite...
-	imDisplay.save(filename+'_display.jpg', 'JPEG', quality=98)
-
-	# throw up completed display image while finishing up print images...
-	displayimage(screen, filename+'_display.jpg', size)
-
-	# save single print composite...
-	tmp = Image.open('images/overlay-phone.png').resize( (1500, 941), Image.ANTIALIAS )
-	print tmp.size, tmp.mode
-	imPrint.paste( tmp, (250, 50, 1750, 991), mask=tmp )
-	imPrint.save(filename+'_phone.jpg', 'JPEG', quality=90)
-	imDouble = Image.new('RGB', (4000, 6000), 'white')
-	# generate double strip for printing...
-	imDouble.paste( imPrint, (0, 0, 2000, 6000) )
-	imDouble.paste( imPrint, (2000, 0, 4000, 6000) )
-	draw = ImageDraw.Draw(imDouble)
-	draw.line( (2000, 0, 2000, 6000), fill='rgb(0,0,0)', width=2)
-	del draw
-	imDouble.save(filename+'_print.jpg', 'JPEG', quality=90)
-
-	print '\r\nProcessing done: ', time.time()-start
-
-	time.sleep(8)
+	time.sleep(1)
 
 	# clean up the temporary files generated during compositing...
 	cleanup_temp_files(filename)
 
 	# print elapsed time to console...
-	print '\r\nTotal cycle time: ', time.time()-start
+	print '\r\nDone: ', time.time()-start
+
 
 
 
