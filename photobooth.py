@@ -158,6 +158,7 @@ while (1):
 			print 'time to display:', time.time()-start
 			displayimage(screen, filename+'_display'+tone+'.jpg', size)
 
+	print '\r\nAll images done:', time.time()-start
 	time.sleep(1)
 
 	# clean up the temporary files generated during compositing...
@@ -166,7 +167,7 @@ while (1):
 	# move files (default) to redundant locations...
 	if move:
 		move_files(filename, path='/media/files-n-stuff/', copy=True)
-		move_files(filename, path='/media/backup/', copy=True)
+		move_files(filename, path='~/Pictures/', copy=True)
 		move_files(filename, path='/media/PHOTOBOOTH/', copy=False)
 
 	# print elapsed time to console...
