@@ -99,7 +99,8 @@ while (1):
 
 	# wait for key push.
 	# bb = raw_input('\r\nHit return to continue...')
-	showtext(screen, "Push a button to start", 100)
+	#showtext(screen, "Push a button to start", 100)
+	displayimage(screen, 'images/pushtostart.jpg', size)
 
 	key = waitforkey([K_g, K_r, K_y])
 	if key == K_y: tone='-sepia'
