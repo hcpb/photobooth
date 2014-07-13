@@ -107,6 +107,8 @@ while (1):
 	if key == K_r: tone='-bw'
 	if key == K_g: tone =''
 
+	displayimage(screen, 'images/fourphotostaken.jpg', size)
+	time.sleep(3)
 	fillscreen(screen, black)
 
 #	showtext(screen, "Four photos will be taken", 75)
