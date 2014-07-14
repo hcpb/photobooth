@@ -132,8 +132,9 @@ while (1):
 
 	# grab the sequence of images from the camera (or, if specified, dummy images)...
 	for i in range(4):
-		showtext(screen, 'Image: '+str(i+1), 100)
-		time.sleep(0.5)
+		#showtext(screen, 'Image: '+str(i+1), 100)
+		displayimage(screen, 'images/image'+str(i+1)+'.jpg', size)
+		time.sleep(0.75)
 		print 
 		print 'Grabbing image: ', i+1
 		fillscreen(screen, black)

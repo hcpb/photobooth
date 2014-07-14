@@ -157,12 +157,12 @@ def move_files(filename, path='/media/PHOTOBOOTH/', copy=True):
 	print 'filename = ', filename
 	print cmd+'raw images...'
 	shellcmd(cmd+filename+'_[a-d].jpg '+path+'raw-images')
-	print cmd+'dislay images...'
-        shellcmd(cmd+filename+'_display*.jpg '+path+'for-display')
-	print cmd+'print image...'
-        shellcmd(cmd+filename+'_print*.jpg '+path+'for-print')
 	print cmd+'phone image...'
         shellcmd(cmd+filename+'_phone*.jpg '+path+'for-phone')
+	print cmd+'print images...'
+        shellcmd(cmd+filename+'_print*.jpg '+path+'for-print')
+	print cmd+'display image...'
+        shellcmd(cmd+filename+'_display*.jpg '+path+'for-display')
       except:
 	print 'PROBLEMS!!'
 
