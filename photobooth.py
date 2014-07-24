@@ -171,7 +171,7 @@ while (1):
 	# move files (default) to redundant locations...
 	if move:
 		move_files(filename, path='/media/SD4GB/', copy=True)
-		move_files(filename, path='~/Pictures/', copy=True)
+		move_files(filename, path='/media/files-n-stuff/', copy=True)
 		move_files(filename, path='/media/PHOTOBOOTH/', copy=False)
 
 	# print elapsed time to console...
