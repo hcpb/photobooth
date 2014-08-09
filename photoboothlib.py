@@ -111,9 +111,11 @@ def generate_composite(template, filename, blocking=True, generateprint=False):
 	#    assumes use of 'phone' template/ending file...
 	#    (requires a vertical 2000x6000 final composite image to start)
 	if generateprint: 
-		shellcmd('gm composite -geometry +0+0 ' + filename + '_phone.jpg images/background-big.jpg -quality 100 done.jpg')
-		shellcmd('gm composite -geometry +2001+0 ' + filename + '_phone.jpg done.jpg -quality 100 done.jpg')
-		shellcmd('gm convert -stroke gray -draw "line 2000,0 2000,6000" done.jpg -quality 95 ' + filename + '_print.jpg')
+		print 'template:', template
+		shellcmd('gm composite -geometry +0+0 ' + filename +'_'+ template + '.jpg images/background-big.jpg -quality 100 done.jpg')
+		shellcmd('gm composite -geometry +2001+0 ' + filename +'_'+ template +'.jpg done.jpg -quality 100 done.jpg')
+		template = template[5:]
+		shellcmd('gm convert -stroke gray -draw "line 2000,0 2000,6000" done.jpg -quality 95 ' + filename + '_print'+template+'.jpg')
 
 # generate print fascade to generate_composite...
 def generate_print(template, filename, blocking=True, generateprint=True):
