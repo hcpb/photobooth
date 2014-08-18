@@ -42,11 +42,13 @@ else:
 	doubleprint=False
 
 # use sepia tone...
-tone = ''
+default_tone = ''
 if 'sepia' in sys.argv and not('bw' in sys.argv):
-	tone = '-sepia'
+	default_tone = '-sepia'
 if 'bw' in sys.argv and not('sepia' in sys.argv):
-	tone='-bw'
+	default_tone='-bw'
+if '4x6' in sys.argv and not('sepia' in sys.argv) and not('bw' in sys.argv):
+	default_tone='-4x6'
 
 # move the files when done? Assume true...
 move=True
@@ -103,9 +105,12 @@ while (1):
 	displayimage(screen, 'images/pushtostart.jpg', size)
 
 	key = waitforkey([K_g, K_r, K_y])
-	if key == K_y: tone='-sepia'
-	if key == K_r: tone='-bw'
-	if key == K_g: tone =''
+	if default_tone=='':
+		if key == K_y: tone='-sepia'
+		if key == K_r: tone='-bw'
+		if key == K_g: tone =''
+	else:
+		tone=default_tone
 
 	displayimage(screen, 'images/fourphotostaken.jpg', size)
 	time.sleep(3)

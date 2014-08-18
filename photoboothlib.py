@@ -44,6 +44,25 @@ templates = {'display':[ ['504x336', '+124+12', 'images/backscreen-hd.jpg', 'bou
 			'gm composite -geometry &ARG1 -resize &ARG2 &ARG3 &ARG4 -quality 95 &FILENAME_&TEMPLATE.jpg '
 			],
 
+	'display-4x6':[ ['504x336', '+124+12', 'images/backscreen-hd.jpg', 'boutput.jpg'],
+			['504x336', '+124+373', 'boutput.jpg', 'boutput.jpg'],
+			['504x336', '+652+12', 'boutput.jpg', 'boutput.jpg'],
+			['504x336', '+652+373', 'boutput.jpg', 'boutput.jpg'],
+			['+522+243', 'x233', 'images/overlay-disp.png', 'boutput.jpg'], 
+			'gm composite -resize &ARG1 -geometry &ARG2 &FILENAME_&I.jpg &ARG3 -quality 98 &ARG4 ',
+			'gm composite -geometry &ARG1 -resize &ARG2 &ARG3 &ARG4 -quality 95 &FILENAME_&TEMPLATE.jpg '
+			],
+
+
+	  'phone-4x6':[ ['1756x1164', '+1120+996', 'images/background-big.jpg', 'output.jpg'],
+			['1756x1164', '+1120+2248', 'output.jpg', 'output.jpg'],
+			['1756x1164', '+1120+3500', 'output.jpg', 'output.jpg'],
+			['1756x1164', '+1120+4752', 'output.jpg', 'output.jpg'],
+			['+1250+50', '1500x', 'images/overlay-phone.png', 'output.jpg'], 
+			'gm composite -resize &ARG1 -geometry &ARG2 &FILENAME_&I.jpg &ARG3 -quality 98 &ARG4 ',
+			'gm composite -geometry &ARG1 -resize &ARG2 &ARG3 &ARG4 -quality 95 &FILENAME_&TEMPLATE.jpg '
+			],
+
 	    'display-sepia':[ ['504x336', '+124+12', 'images/backscreen-hd.jpg', 'boutput.jpg'],
 			['504x336', '+124+373', 'boutput.jpg', 'boutput.jpg'],
 			['504x336', '+652+12', 'boutput.jpg', 'boutput.jpg'],
@@ -53,7 +72,7 @@ templates = {'display':[ ['504x336', '+124+12', 'images/backscreen-hd.jpg', 'bou
 			'gm composite -geometry &ARG1 -resize &ARG2 &ARG3 &ARG4 -quality 95 &FILENAME_&TEMPLATE.jpg '
 			],
 
-	      'phone-sepia':[ ['1756x1164', '+120+996', 'images/background-half-big.jpg', 'output.jpg'],
+	'phone-sepia':[ ['1756x1164', '+120+996', 'images/background-half-big.jpg', 'output.jpg'],
 			['1756x1164', '+120+2248', 'output.jpg', 'output.jpg'],
 			['1756x1164', '+120+3500', 'output.jpg', 'output.jpg'],
 			['1756x1164', '+120+4752', 'output.jpg', 'output.jpg'],
@@ -62,7 +81,7 @@ templates = {'display':[ ['504x336', '+124+12', 'images/backscreen-hd.jpg', 'bou
 			'gm composite -geometry &ARG1 -resize &ARG2 &ARG3 &ARG4 -quality 95 &FILENAME_&TEMPLATE.jpg '
 			],
 
-	    'display-bw':[ ['504x336', '+124+12', 'images/backscreen-hd.jpg', 'boutput.jpg'],
+	 'display-bw':[ ['504x336', '+124+12', 'images/backscreen-hd.jpg', 'boutput.jpg'],
 			['504x336', '+124+373', 'boutput.jpg', 'boutput.jpg'],
 			['504x336', '+652+12', 'boutput.jpg', 'boutput.jpg'],
 			['504x336', '+652+373', 'boutput.jpg', 'boutput.jpg'],
@@ -71,7 +90,7 @@ templates = {'display':[ ['504x336', '+124+12', 'images/backscreen-hd.jpg', 'bou
 			'gm composite -geometry &ARG1 -resize &ARG2 &ARG3 &ARG4 -quality 95 &FILENAME_&TEMPLATE.jpg '
 			],
 
-	      'phone-bw':[ ['1756x1164', '+120+996', 'images/background-half-big.jpg', 'output.jpg'],
+	   'phone-bw':[ ['1756x1164', '+120+996', 'images/background-half-big.jpg', 'output.jpg'],
 			['1756x1164', '+120+2248', 'output.jpg', 'output.jpg'],
 			['1756x1164', '+120+3500', 'output.jpg', 'output.jpg'],
 			['1756x1164', '+120+4752', 'output.jpg', 'output.jpg'],
