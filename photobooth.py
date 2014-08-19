@@ -49,6 +49,8 @@ if 'bw' in sys.argv and not('sepia' in sys.argv):
 	default_tone='-bw'
 if '4x6' in sys.argv and not('sepia' in sys.argv) and not('bw' in sys.argv):
 	default_tone='-4x6'
+if '2x3' in sys.argv and not('sepia' in sys.argv) and not('bw' in sys.argv):
+	default_tone='-2x3'
 
 # move the files when done? Assume true...
 move=True

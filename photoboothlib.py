@@ -63,6 +63,25 @@ templates = {'display':[ ['504x336', '+124+12', 'images/backscreen-hd.jpg', 'bou
 			'gm composite -geometry &ARG1 -resize &ARG2 &ARG3 &ARG4 -quality 95 &FILENAME_&TEMPLATE.jpg '
 			],
 
+	'display-2x3':[ ['504x336', '+124+12', 'images/backscreen-hd.jpg', 'boutput.jpg'],
+			['504x336', '+124+373', 'boutput.jpg', 'boutput.jpg'],
+			['504x336', '+652+12', 'boutput.jpg', 'boutput.jpg'],
+			['504x336', '+652+373', 'boutput.jpg', 'boutput.jpg'],
+			['+522+243', 'x233', 'images/overlay-disp.png', 'boutput.jpg'], 
+			'gm composite -resize &ARG1 -geometry &ARG2 &FILENAME_&I.jpg &ARG3 -quality 98 &ARG4 ',
+			'gm composite -geometry &ARG1 -resize &ARG2 &ARG3 &ARG4 -quality 95 &FILENAME_&TEMPLATE.jpg '
+			],
+
+
+	  'phone-2x3':[ ['878x582', '+560+498', 'images/background-big2k3k.jpg', 'output.jpg'],
+			['878x582', '+560+1124', 'output.jpg', 'output.jpg'],
+			['878x582', '+560+1750', 'output.jpg', 'output.jpg'],
+			['878x582', '+560+2376', 'output.jpg', 'output.jpg'],
+			['+625+25', '750x', 'images/overlay-phone.png', 'output.jpg'], 
+			'gm composite -resize &ARG1 -geometry &ARG2 &FILENAME_&I.jpg &ARG3 -quality 98 &ARG4 ',
+			'gm composite -geometry &ARG1 -resize &ARG2 &ARG3 &ARG4 -quality 95 &FILENAME_&TEMPLATE.jpg '
+			],
+
 	    'display-sepia':[ ['504x336', '+124+12', 'images/backscreen-hd.jpg', 'boutput.jpg'],
 			['504x336', '+124+373', 'boutput.jpg', 'boutput.jpg'],
 			['504x336', '+652+12', 'boutput.jpg', 'boutput.jpg'],
