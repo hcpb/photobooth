@@ -104,7 +104,10 @@ while (1):
 	# wait for key push.
 	# bb = raw_input('\r\nHit return to continue...')
 	#showtext(screen, "Push a button to start", 100)
-	displayimage(screen, 'images/pushtostart.jpg', size)
+	if default_tone in ['-2x3', '-4x6']:
+		displayimage(screen, 'images/pushtostart-nochoice.jpg', size)
+	else:	
+		displayimage(screen, 'images/pushtostart.jpg', size)
 
 	key = waitforkey([K_g, K_r, K_y])
 	if default_tone=='':
