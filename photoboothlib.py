@@ -145,6 +145,11 @@ def generate_composite(template, filename, blocking=True, generateprint=False):
 		command = join(split(command, '&ARG'+str(j+1)), templates[template][4][j])
 	shellcmd(command)
 
+	# copy the phone version to the print version so the printing computer will see it...
+	if template == 'phone-2x3':
+		print 'template', template
+		shellcmd('cp '+filename+'_'+template+'.jpg '+filename+'_print-2x3.jpg')
+
 	# do this extra step to make a double print strip, 
 	#    assumes use of 'phone' template/ending file...
 	#    (requires a vertical 2000x6000 final composite image to start)
