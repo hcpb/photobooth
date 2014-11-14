@@ -25,6 +25,7 @@ OPTIONS:
 	regen=DSCxxx	filename to regenerate
 	location=<path>	path to raw images with _a, _b, _c, _d suffixes of filename
 	nodisplay	do not use the graphical display or delays with them (default = true)
+	recurse		used with regen to generate composites from all photos in raw directory
 
 DESCRIPTION:
 	This python script implements a photo booth where a sequence of four images is 
@@ -100,6 +101,17 @@ for i in sys.argv:
 	if 'location' in i:
 		location = split(i, '=')[1]
 
+# regenerate all files from raws...
+recurse = False
+loop = xrange(10000) # effectively while(1)...
+if 'recurse' in sys.argv and regenerate:
+	recurse = True
+	rawfiles = os.listdir(location+'raw-images/')
+	loop = []
+	for i in rawfiles:
+		if i[0:7] not in loop: loop.append(i[0:7])
+	loop.sort()
+
 #=============================================================================
 # ===================== DONE COMMAND LINE ARGUMENTS ==========================
 #=============================================================================
@@ -123,7 +135,7 @@ if display:
 	screen = pygame.display.set_mode(size)
 	#toggle_fullscreen()
 
-while (1):
+for element in loop:
 	# flush the key queue in the event that someone hit it...
 	# important when looping, not so much the first time into the loop...
 	if display: pygame.event.clear()
@@ -154,8 +166,10 @@ while (1):
 	start = time.time()
 	
 	# get a new filename and print it to the console...
-	#if not(regenerate):
-	filename= new_filename(increment=increment)
+	if not(recurse):
+		filename= new_filename(increment=increment)
+	else: 
+		filename = element # this comes from the raw directory...
 	# filename is pre-filled above from command line... 
 	print '\r\nnew filename:', filename
 
@@ -229,7 +243,7 @@ while (1):
 
 
 	# only do loop once if we're regenerating a set of composites...
-	if regenerate: break
+	if regenerate and not recurse: break
 
 
 
