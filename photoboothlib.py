@@ -63,6 +63,25 @@ templates = {'display':[ ['504x336', '+124+12', 'images/backscreen-hd.jpg', 'bou
 			'gm composite -geometry &ARG1 -resize &ARG2 &ARG3 &ARG4 -quality 95 &FILENAME_&TEMPLATE.jpg '
 			],
 
+	'display-1x3':[ ['504x336', '+124+12', 'images/backscreen-hd.jpg', 'boutput.jpg'],
+			['504x336', '+124+373', 'boutput.jpg', 'boutput.jpg'],
+			['504x336', '+652+12', 'boutput.jpg', 'boutput.jpg'],
+			['504x336', '+652+373', 'boutput.jpg', 'boutput.jpg'],
+			['+522+243', 'x233', 'images/overlay-disp.png', 'boutput.jpg'], 
+			'gm composite -resize &ARG1 -geometry &ARG2 &FILENAME_&I.jpg &ARG3 -quality 98 &ARG4 ',
+			'gm composite -geometry &ARG1 -resize &ARG2 &ARG3 &ARG4 -quality 95 &FILENAME_&TEMPLATE.jpg '
+			],
+
+
+	  'phone-1x3':[ ['878x582', '+61+498', 'images/background-big1k3k.jpg', 'output.jpg'],
+			['878x582', '+61+1124', 'output.jpg', 'output.jpg'],
+			['878x582', '+61+1750', 'output.jpg', 'output.jpg'],
+			['878x582', '+61+2376', 'output.jpg', 'output.jpg'],
+			['+125+25', '750x', 'images/overlay-phone.png', 'output.jpg'], 
+			'gm composite -resize &ARG1 -geometry &ARG2 &FILENAME_&I.jpg &ARG3 -quality 98 &ARG4 ',
+			'gm composite -geometry &ARG1 -resize &ARG2 &ARG3 &ARG4 -quality 95 &FILENAME_&TEMPLATE.jpg '
+			],
+
 	'display-2x3':[ ['504x336', '+124+12', 'images/backscreen-hd.jpg', 'boutput.jpg'],
 			['504x336', '+124+373', 'boutput.jpg', 'boutput.jpg'],
 			['504x336', '+652+12', 'boutput.jpg', 'boutput.jpg'],
@@ -153,12 +172,18 @@ def generate_composite(template, filename, blocking=True, generateprint=False):
 	# do this extra step to make a double print strip, 
 	#    assumes use of 'phone' template/ending file...
 	#    (requires a vertical 2000x6000 final composite image to start)
-	if generateprint: 
+	if generateprint and template=='phone-2x3': 
 		print 'template:', template
 		shellcmd('gm composite -geometry +0+0 ' + filename +'_'+ template + '.jpg images/background-big.jpg -quality 100 done.jpg')
 		shellcmd('gm composite -geometry +2001+0 ' + filename +'_'+ template +'.jpg done.jpg -quality 100 done.jpg')
 		template = template[5:]
 		shellcmd('gm convert -stroke gray -draw "line 2000,0 2000,6000" done.jpg -quality 95 ' + filename + '_print'+template+'.jpg')
+	if generateprint and template=='phone-1x3': 
+		print 'template:', template
+		shellcmd('gm composite -geometry +0+0 ' + filename +'_'+ template + '.jpg images/background-big2k3k.jpg -quality 100 done.jpg')
+		shellcmd('gm composite -geometry +1001+0 ' + filename +'_'+ template +'.jpg done.jpg -quality 100 done.jpg')
+		template = template[5:]
+		shellcmd('gm convert -stroke gray -draw "line 1000,0 1000,3000" done.jpg -quality 95 ' + filename + '_print'+template+'.jpg')
 
 # generate print fascade to generate_composite...
 def generate_print(template, filename, blocking=True, generateprint=True):

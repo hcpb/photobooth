@@ -19,6 +19,12 @@ OPTIONS:
 	doubleprint	generate the double print (adds time, default: no doubleprint)
 	sepia		do composites in sepia tone
 	bw		do composites in black and white
+	1x3		generate phone at 1000x3000 reslution (faster) for double prints
+	2x6		generate phone and print in 2000x3000 resolution (faster)
+	4x6		generate phone and print in 4000x6000 resolution (too slow)
+	regen=DSCxxx	filename to regenerate
+	location=<path>	path to raw images with _a, _b, _c, _d suffixes of filename
+	nodisplay	do not use the graphical display or delays with them (default = true)
 
 DESCRIPTION:
 	This python script implements a photo booth where a sequence of four images is 
@@ -41,6 +47,11 @@ if 'doubleprint' in sys.argv:
 else:
 	doubleprint=False
 
+if 'nodisplay' in sys.argv:
+	display = False
+else:
+	display = True
+
 # use sepia tone...
 default_tone = ''
 if 'sepia' in sys.argv and not('bw' in sys.argv):
@@ -51,6 +62,8 @@ if '4x6' in sys.argv and not('sepia' in sys.argv) and not('bw' in sys.argv):
 	default_tone='-4x6'
 if '2x3' in sys.argv and not('sepia' in sys.argv) and not('bw' in sys.argv):
 	default_tone='-2x3'
+if '1x3' in sys.argv and not('sepia' in sys.argv) and not('bw' in sys.argv):
+	default_tone='-1x3'
 
 # move the files when done? Assume true...
 move=True
@@ -78,6 +91,15 @@ if temp not in ['']:
 increment=True
 if 'noincrement' in sys.argv:
 	increment = False
+
+# for regenerating a photo, need to specify base filename and location of raws...
+regenerate = False
+for i in sys.argv:
+	if 'regen' in i:
+		regenerate = True
+	if 'location' in i:
+		location = split(i, '=')[1]
+
 #=============================================================================
 # ===================== DONE COMMAND LINE ARGUMENTS ==========================
 #=============================================================================
@@ -94,22 +116,28 @@ print 'nomove:', repr(not(move))
 print 'lastphoto:', last
 print 'increment:', repr(increment)
 print 'doubleprint:', repr(doubleprint)
+print 'tone:', repr(default_tone)
 
-pygame.init()
-screen = pygame.display.set_mode(size)
-#toggle_fullscreen()
+if display:
+	pygame.init()
+	screen = pygame.display.set_mode(size)
+	#toggle_fullscreen()
 
 while (1):
+	# flush the key queue in the event that someone hit it...
+	# important when looping, not so much the first time into the loop...
+	if display: pygame.event.clear()
 
 	# wait for key push.
 	# bb = raw_input('\r\nHit return to continue...')
 	#showtext(screen, "Push a button to start", 100)
-	if default_tone in ['-2x3', '-4x6']:
-		displayimage(screen, 'images/pushtostart-nochoice.jpg', size)
-	else:	
-		displayimage(screen, 'images/pushtostart.jpg', size)
+	if display:
+		if default_tone in ['-1x3', '-2x3', '-4x6']:
+			displayimage(screen, 'images/pushtostart-nochoice.jpg', size)
+		else:	
+			displayimage(screen, 'images/pushtostart.jpg', size)
 
-	key = waitforkey([K_g, K_r, K_y])
+		key = waitforkey([K_g, K_r, K_y])	
 	if default_tone=='':
 		if key == K_y: tone='-sepia'
 		if key == K_r: tone='-bw'
@@ -117,19 +145,18 @@ while (1):
 	else:
 		tone=default_tone
 
-	displayimage(screen, 'images/fourphotostaken.jpg', size)
-	time.sleep(3)
-	fillscreen(screen, black)
-
-#	showtext(screen, "Four photos will be taken", 75)
-#	time.sleep(2.5)
-#	fillscreen(screen, black)
+	if display:
+		displayimage(screen, 'images/fourphotostaken.jpg', size)
+		time.sleep(3)
+		fillscreen(screen, black)
 
 	# keep track of the starting time for some statistics...
 	start = time.time()
 	
 	# get a new filename and print it to the console...
+	#if not(regenerate):
 	filename= new_filename(increment=increment)
+	# filename is pre-filled above from command line... 
 	print '\r\nnew filename:', filename
 
 	# prime threads for compositing images...
@@ -142,16 +169,25 @@ while (1):
 
 	# grab the sequence of images from the camera (or, if specified, dummy images)...
 	for i in range(4):
-		#showtext(screen, 'Image: '+str(i+1), 100)
-		displayimage(screen, 'images/image'+str(i+1)+'.jpg', size)
-		time.sleep(0.75)
+		if display:
+			#showtext(screen, 'Image: '+str(i+1), 100)
+			displayimage(screen, 'images/image'+str(i+1)+'.jpg', size)
+			time.sleep(0.75)
 		print 
 		print 'Grabbing image: ', i+1
-		fillscreen(screen, black)
-		grab_image(filename, i, camera_arg)
-		displayimage(screen, filename+'_'+suffix[i]+'.jpg', camerasize, cameraloc)
+		if display: fillscreen(screen, black)
+		if not(regenerate): 
+			# get image from camera...
+			grab_image(filename, i, camera_arg)
+		else:
+			# if regenerate, copy from location the appropriate raw image...
+			# and create semaphore file to indicate completion...
+			print 'Copying:', location + filename+'_'+suffix[i] + '.jpg'
+			shellcmd('cp ' + location + 'raw-images/' + filename+'_'+suffix[i] + '.jpg' + ' .')
+			open(filename+'_'+suffix[i]+'_done', 'w').write('done') 
+		if display: displayimage(screen, filename+'_'+suffix[i]+'.jpg', camerasize, cameraloc)
 		print 'time to display:', time.time()-start
-		time.sleep(3)
+		if display: time.sleep(3)
 
 	# wait until all compositing threads are complete...
 	living=True
@@ -159,9 +195,9 @@ while (1):
 	while ( living ):# or t_print.isAlive() ): 
 		living=False
 		if not displayed: 
-			fillscreen(screen, black)
+		    	if display:	fillscreen(screen, black)
 			time.sleep(0.5)
-			showtext(screen, 'Processing...', 100)
+			if display: showtext(screen, 'Processing...', 100)
 			time.sleep(0.5)
 		else: time.sleep(1)
 		print '    ===> still processing...'	
@@ -170,7 +206,8 @@ while (1):
 		if not(t_[0].isAlive()) and not(displayed):
 			displayed=True
 			print 'time to display:', time.time()-start
-			displayimage(screen, filename+'_display'+tone+'.jpg', size)
+			if display: 
+				displayimage(screen, filename+'_display'+tone+'.jpg', size)
 
 	print '\r\nAll images done:', time.time()-start
 	time.sleep(1)
@@ -179,13 +216,20 @@ while (1):
 	cleanup_temp_files(filename)
 
 	# move files (default) to redundant locations...
-	if move:
+	if move and not(regenerate):
 		move_files(filename, path='/media/SD4GB/', copy=True)
 		move_files(filename, path='/media/files-n-stuff/', copy=True)
 		move_files(filename, path='/media/PHOTOBOOTH/', copy=False)
 
+	if move and regenerate:
+		move_files(filename, path=location, copy=False)
+
 	# print elapsed time to console...
 	print '\r\nDone: ', time.time()-start
+
+
+	# only do loop once if we're regenerating a set of composites...
+	if regenerate: break
 
 
 
