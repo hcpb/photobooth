@@ -133,9 +133,11 @@ cameraloc = (width-camw)/2, 0
 black = (0,0,0)
 white = (255,255,255)
 
-def waitforkey(key, quitable = True):
+def waitforkey(key, quitable = True, timeout = 99999999):
 	userkey = False
 	while not(userkey):
+	   if timeout > 0:
+		timeout -= 1
 		time.sleep(1)
 		for event in pygame.event.get():
 			#print repr(event)
@@ -144,7 +146,11 @@ def waitforkey(key, quitable = True):
 				#print 'keydown...'
 				if event.key in key: return event.key
 				if quitable and event.key == K_q: sys.exit()
+	   else:
+		# if we end up here, we timed out. Return "t" key...
+		return K_t
 	pygame.event.clear()
+
 
 def fillscreen(screen, color):
 	screen.fill(color)

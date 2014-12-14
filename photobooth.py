@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # many dependencies are all brought in with this import...
 from photoboothlib import *
+from random import randrange
 
 #=============================================================================
 # ========================= COMMAND LINE ARGUMENTS ===========================
@@ -142,7 +143,7 @@ for element in loop:
 
 	# wait for key push.
 	# bb = raw_input('\r\nHit return to continue...')
-	#showtext(screen, "Push a button to start", 100)
+	#showtext(screen, "Push a button to ", 100)
 	if display:
 		if default_tone in ['-1x3', '-2x3', '-4x6']:
 			displayimage(screen, 'images/pushtostart-nochoice.jpg', size)
@@ -156,6 +157,15 @@ for element in loop:
 		if key == K_g: tone =''
 	else:
 		tone=default_tone
+
+	if display:
+		randbutton = randrange(3)
+		buttontext = ['red', 'green', 'yellow'][randbutton]
+		showtext(screen, "Push " + buttontext + " to continue", 90)
+		keylist = [ [K_r, K_g, K_y][randbutton] ]
+		key = waitforkey(keylist, timeout=10)
+		if key == K_t: continue	
+		fillscreen(screen, black)
 
 	if display:
 		displayimage(screen, 'images/fourphotostaken.jpg', size)
@@ -244,7 +254,6 @@ for element in loop:
 
 	# only do loop once if we're regenerating a set of composites...
 	if regenerate and not recurse: break
-
 
 
 
