@@ -169,7 +169,7 @@ for element in loop:
 
 	if display:
 		displayimage(screen, 'images/fourphotostaken.jpg', size)
-		time.sleep(3)
+		time.sleep(2.0)
 		fillscreen(screen, black)
 
 	# keep track of the starting time for some statistics...
