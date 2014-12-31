@@ -5,9 +5,16 @@ import piggyphoto
 import os, sys
 import shutil
 import pygame
+from serial import Serial
 from string import split,join
 from pygame.locals import *
 from templates import templates
+
+# set up serial port for button box and lens light
+# and turn on all three buttons...
+buttonpattern = [0, 1, 2, 4, 2, 1, 0, 4, 2, 1, 0, 1, 2, 4, 0, 2, 5, 2, 5, 7, 0, 7, 0, 7]
+ser = Serial(port = '/dev/ttyACM0')
+ser.write(str(7))
 
 # list with raw image suffixes, used for appending to files as they are created
 suffix = [ 'a', 'b', 'c', 'd' ]
@@ -134,17 +141,35 @@ black = (0,0,0)
 white = (255,255,255)
 
 def waitforkey(key, quitable = True, timeout = 99999999):
+	# check for button lighting...
+	if len(key)==1: # looking for a specific key, so light just that one...
+		ser.write(str(0))
+		time.sleep(0.1)
+		if key[0]==K_g: ser.write(str(4))
+		if key[0]==K_y: ser.write(str(2))
+		if key[0]==K_r: ser.write(str(1))
+		blink = False
+	else: 
+		blink = True
+		blinky = 0
+
 	userkey = False
 	while not(userkey):
 	   if timeout > 0:
 		timeout -= 1
-		time.sleep(1)
+		time.sleep(0.2)
+		if blink:
+			ser.write(str(buttonpattern[blinky]))
+			if blinky<len(buttonpattern)-1: blinky += 1
+			else: blinky = 0
 		for event in pygame.event.get():
 			#print repr(event)
 			if event.type == QUIT: sys.exit()
 			elif event.type == KEYDOWN: 
 				#print 'keydown...'
-				if event.key in key: return event.key
+				if event.key in key:
+					ser.write(str(0)) # turn off button lights... 
+					return event.key
 				if quitable and event.key == K_q: sys.exit()
 	   else:
 		# if we end up here, we timed out. Return "t" key...
