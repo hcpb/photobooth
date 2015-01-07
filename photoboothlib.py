@@ -140,6 +140,13 @@ cameraloc = (width-camw)/2, 0
 black = (0,0,0)
 white = (255,255,255)
 
+def blinklenslight():
+	for i in range(20):
+		ser.write(str(8))
+		time.sleep(0.05)
+		ser.write(str(0))
+		time.sleep(0.05)
+
 def waitforkey(key, quitable = True, timeout = 99999999):
 	# check for button lighting...
 	if len(key)==1: # looking for a specific key, so light just that one...

@@ -196,7 +196,8 @@ for element in loop:
 		if display:
 			#showtext(screen, 'Image: '+str(i+1), 100)
 			displayimage(screen, 'images/image'+str(i+1)+'.jpg', size)
-			time.sleep(0.75)
+			#time.sleep(0.75)
+			blinklenslight()
 		print 
 		print 'Grabbing image: ', i+1
 		if display: fillscreen(screen, black)
