@@ -140,12 +140,16 @@ cameraloc = (width-camw)/2, 0
 black = (0,0,0)
 white = (255,255,255)
 
+def lightsoff():
+	ser.write(str(0)) #turn off all lights...
+
 def blinklenslight():
-	for i in range(20):
-		ser.write(str(8))
-		time.sleep(0.05)
+	for i in range(5):
+		ser.write(str(8)) # flash lens ring lighjt
+		time.sleep(0.04)
 		ser.write(str(0))
-		time.sleep(0.05)
+		time.sleep(0.04)
+	ser.write(str(8))	# leave lens ring light on when done...
 
 def waitforkey(key, quitable = True, timeout = 99999999):
 	# check for button lighting...

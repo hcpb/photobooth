@@ -210,6 +210,7 @@ for element in loop:
 			print 'Copying:', location + filename+'_'+suffix[i] + '.jpg'
 			shellcmd('cp ' + location + 'raw-images/' + filename+'_'+suffix[i] + '.jpg' + ' .')
 			open(filename+'_'+suffix[i]+'_done', 'w').write('done') 
+		lightsoff() # turn off lens ring light...
 		if display: displayimage(screen, filename+'_'+suffix[i]+'.jpg', camerasize, cameraloc)
 		print 'time to display:', time.time()-start
 		if display: time.sleep(3)
