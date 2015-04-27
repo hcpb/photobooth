@@ -233,7 +233,7 @@ for element in loop:
 			displayed=True
 			print 'time to display:', time.time()-start
 			if display: 
-				displayimage(screen, filename+'_display'+tone+'.jpg', size)
+				displayimage(screen, filename+'_display'+tone+'.jpg', dispsize, disploc)
 
 	print '\r\nAll images done:', time.time()-start
 	time.sleep(1)

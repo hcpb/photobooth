@@ -137,6 +137,10 @@ def move_files(filename, path='/media/PHOTOBOOTH/', copy=True):
 size = width, height = 1230, 692
 camerasize = camw, camh =  1037,692
 cameraloc = (width-camw)/2, 0
+#dispsize = disw, dish = 1056, 720
+dispsize = disw, dish = 1015, 692
+disploc = (width-disw)/2, 0
+
 black = (0,0,0)
 white = (255,255,255)
 
@@ -192,10 +196,10 @@ def fillscreen(screen, color):
 	screen.fill(color)
 	pygame.display.flip()
 
-def displayimage(screen, filename, size, location=(0,0)):
+def displayimage(screen, filename, csize, location=(0,0)):
 		image = pygame.image.load(filename)
 		imagerect = image.get_rect()
-		image = pygame.transform.scale(image, size)
+		image = pygame.transform.scale(image, csize)
 		screen.blit(image, location)
 		pygame.display.flip()
 
