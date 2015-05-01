@@ -3,7 +3,7 @@ templates = {'display':[ ['504x336', '+12+12', 'images/backscreen-hd.jpg', 'bout
 			['504x336', '+12+373', 'boutput.jpg', 'boutput.jpg'],
 			['504x336', '+540+12', 'boutput.jpg', 'boutput.jpg'],
 			['504x336', '+540+373', 'boutput.jpg', 'boutput.jpg'],
-			['+522+243', 'x233', 'images/overlay-disp.png', 'boutput.jpg'], 
+			['+411+243', 'x233', 'images/overlay-disp.png', 'boutput.jpg'], 
 			'gm composite -resize &ARG1 -geometry &ARG2 &FILENAME_&I.jpg &ARG3 -quality 98 &ARG4 ',
 			'gm composite -geometry &ARG1 -resize &ARG2 &ARG3 &ARG4 -quality 95 &FILENAME_&TEMPLATE.jpg '
 			],
@@ -21,7 +21,7 @@ templates = {'display':[ ['504x336', '+12+12', 'images/backscreen-hd.jpg', 'bout
 			['504x336', '+12+373', 'boutput.jpg', 'boutput.jpg'],
 			['504x336', '+540+12', 'boutput.jpg', 'boutput.jpg'],
 			['504x336', '+540+373', 'boutput.jpg', 'boutput.jpg'],
-			['+522+243', 'x233', 'images/overlay-disp.png', 'boutput.jpg'], 
+			['+411+243', 'x233', 'images/overlay-disp.png', 'boutput.jpg'], 
 			'gm composite -resize &ARG1 -geometry &ARG2 &FILENAME_&I.jpg &ARG3 -quality 98 &ARG4 ',
 			'gm composite -geometry &ARG1 -resize &ARG2 &ARG3 &ARG4 -quality 95 &FILENAME_&TEMPLATE.jpg '
 			],
@@ -40,7 +40,7 @@ templates = {'display':[ ['504x336', '+12+12', 'images/backscreen-hd.jpg', 'bout
 			['504x336', '+12+373', 'boutput.jpg', 'boutput.jpg'],
 			['504x336', '+540+12', 'boutput.jpg', 'boutput.jpg'],
 			['504x336', '+540+373', 'boutput.jpg', 'boutput.jpg'],
-			['+522+243', 'x233', 'images/overlay-disp.png', 'boutput.jpg'], 
+			['+411+243', 'x233', 'images/overlay-disp.png', 'boutput.jpg'], 
 			'gm composite -resize &ARG1 -geometry &ARG2 &FILENAME_&I.jpg &ARG3 -quality 98 &ARG4 ',
 			'gm convert -font Courier -pointsize 20 -fill black -draw "text 1070,365 &FILENAME" boutput.jpg boutput.jpg; gm composite -geometry &ARG1 -resize &ARG2 &ARG3 &ARG4 -quality 95 &FILENAME_&TEMPLATE.jpg '
 			],
@@ -59,7 +59,7 @@ templates = {'display':[ ['504x336', '+12+12', 'images/backscreen-hd.jpg', 'bout
 			['504x336', '+12+373', 'boutput.jpg', 'boutput.jpg'],
 			['504x336', '+540+12', 'boutput.jpg', 'boutput.jpg'],
 			['504x336', '+540+373', 'boutput.jpg', 'boutput.jpg'],
-			['+522+243', 'x233', 'images/overlay-disp.png', 'boutput.jpg'], 
+			['+411+243', 'x233', 'images/overlay-disp.png', 'boutput.jpg'], 
 			'gm composite -resize &ARG1 -geometry &ARG2 &FILENAME_&I.jpg &ARG3 -quality 98 &ARG4 ',
 			'gm composite -geometry &ARG1 -resize &ARG2 &ARG3 &ARG4 -quality 95 &FILENAME_&TEMPLATE.jpg '
 			],
@@ -78,7 +78,7 @@ templates = {'display':[ ['504x336', '+12+12', 'images/backscreen-hd.jpg', 'bout
 			['504x336', '+12+373', 'boutput.jpg', 'boutput.jpg'],
 			['504x336', '+540+12', 'boutput.jpg', 'boutput.jpg'],
 			['504x336', '+540+373', 'boutput.jpg', 'boutput.jpg'],
-			['+522+243', 'x233', 'images/overlay-disp.png', 'boutput.jpg'], 
+			['+411+243', 'x233', 'images/overlay-disp.png', 'boutput.jpg'], 
 			'gm convert -resize &ARG1 &FILENAME_&I.jpg -modulate 115,0,100 -colorize 7,21,50 coloroutput.jpg; gm composite -geometry &ARG2 coloroutput.jpg &ARG3 -quality 98 &ARG4 ',
 			'gm composite -geometry &ARG1 -resize &ARG2 &ARG3 &ARG4 -quality 95 &FILENAME_&TEMPLATE.jpg '
 			],
@@ -96,7 +96,7 @@ templates = {'display':[ ['504x336', '+12+12', 'images/backscreen-hd.jpg', 'bout
 			['504x336', '+12+373', 'boutput.jpg', 'boutput.jpg'],
 			['504x336', '+540+12', 'boutput.jpg', 'boutput.jpg'],
 			['504x336', '+540+373', 'boutput.jpg', 'boutput.jpg'],
-			['+522+243', 'x233', 'images/overlay-disp.png', 'boutput.jpg'], 
+			['+411+243', 'x233', 'images/overlay-disp.png', 'boutput.jpg'], 
 			'gm convert -resize &ARG1 &FILENAME_&I.jpg -colorspace GRAY coloroutput.jpg; gm composite -geometry &ARG2 coloroutput.jpg &ARG3 -quality 98 &ARG4 ',
 			'gm composite -geometry &ARG1 -resize &ARG2 &ARG3 &ARG4 -quality 95 &FILENAME_&TEMPLATE.jpg '
 			],
