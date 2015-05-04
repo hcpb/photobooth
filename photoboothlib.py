@@ -128,6 +128,8 @@ def move_files(filename, path='/media/PHOTOBOOTH/', copy=True):
         shellcmd(cmd+filename+'_print*.jpg '+path+'for-print')
 	print cmd+'display image...'
         shellcmd(cmd+filename+'_display*.jpg '+path+'for-display')
+	print cmd+'lastone.txt...'
+	shellcmd(cmd+'lastone.txt'+path)
       except:
 	print 'PROBLEMS!!'
 

@@ -240,6 +240,7 @@ for element in loop:
 
 	# clean up the temporary files generated during compositing...
 	cleanup_temp_files(filename)
+	open('/media/PHOTOBOOTH/lastone.txt', 'w').write(filename)
 
 	# move files (default) to redundant locations...
 	if move and not(regenerate):
