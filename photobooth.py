@@ -27,6 +27,7 @@ OPTIONS:
 	location=<path>	path to raw images with _a, _b, _c, _d suffixes of filename
 	nodisplay	do not use the graphical display or delays with them (default = true)
 	recurse		used with regen to generate composites from all photos in raw directory
+	noserial	allow running script without button box connected (i.e., with no serial port)
 
 DESCRIPTION:
 	This python script implements a photo booth where a sequence of four images is 

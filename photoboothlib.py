@@ -13,7 +13,12 @@ from templates import templates
 # set up serial port for button box and lens light
 # and turn on all three buttons...
 buttonpattern = [0, 1, 2, 4, 2, 1, 0, 4, 2, 1, 0, 1, 2, 4, 0, 2, 5, 2, 5, 7, 0, 7, 0, 7]
-ser = Serial(port = '/dev/ttyACM0')
+if 'noserial' in sys.argv: ## this allows us to not have the button box connected...
+ 	ser = open('dummyserial.txt','w')
+	noserial = True
+else:
+	ser = Serial(port = '/dev/ttyACM0')
+	noserial = False
 ser.write(str(7))
 
 # list with raw image suffixes, used for appending to files as they are created
