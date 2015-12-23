@@ -219,11 +219,13 @@ for element in loop:
 			shellcmd('cp ' + location + 'raw-images/' + filename+'_'+suffix[i] + '.jpg' + ' .')
 			open(filename+'_'+suffix[i]+'_done', 'w').write('done') 
 		lightsoff() # turn off lens ring light...
-		if makesmall: 
-			shellcmd('gm convert '+filename+'_'+suffix[i]+'.jpg -resize 1626x1080 -quality 75 '+filename+'_sm_'+suffix[i]+'.jpg')
 		if display: displayimage(screen, filename+'_'+suffix[i]+'.jpg', camerasize, cameraloc)
 		print 'time to display:', time.time()-start
-		if display: time.sleep(3)
+		if makesmall: 
+			shellcmd('gm convert '+filename+'_'+suffix[i]+'.jpg -resize 1626x1080 -quality 75 '+filename+'_sm_'+suffix[i]+'.jpg')
+			if display: time.sleep(2)
+		else:
+			if display: time.sleep(3)
 
 	# wait until all compositing threads are complete...
 	living=True
