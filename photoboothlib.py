@@ -155,10 +155,11 @@ def lightsoff():
 	ser.write(str(0)) #turn off all lights...
 
 def blinklenslight():
-	for i in range(5):
+	for i in range(5): 
 		ser.write(str(8)) # flash lens ring lighjt
 		time.sleep(0.04)
-		ser.write(str(0))
+		# commented out because blinky bracelet needs constant power, not pulsed...
+		#ser.write(str(0))
 		time.sleep(0.04)
 	ser.write(str(8))	# leave lens ring light on when done...
 

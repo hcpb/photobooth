@@ -28,6 +28,7 @@ OPTIONS:
 	nodisplay	do not use the graphical display or delays with them (default = true)
 	recurse		used with regen to generate composites from all photos in raw directory
 	noserial	allow running script without button box connected (i.e., with no serial port)
+	makesmall	generate small single images for display on Amazon tablets...
 
 DESCRIPTION:
 	This python script implements a photo booth where a sequence of four images is 
@@ -113,6 +114,12 @@ if 'recurse' in sys.argv and regenerate:
 	for i in rawfiles:
 		if i[0:7] not in loop: loop.append(i[0:7])
 	loop.sort()
+
+# makes mall...
+if 'makesmall' in sys.argv:
+	makesmall = True
+else:
+	makesmall = False
 
 #=============================================================================
 # ===================== DONE COMMAND LINE ARGUMENTS ==========================
@@ -212,6 +219,8 @@ for element in loop:
 			shellcmd('cp ' + location + 'raw-images/' + filename+'_'+suffix[i] + '.jpg' + ' .')
 			open(filename+'_'+suffix[i]+'_done', 'w').write('done') 
 		lightsoff() # turn off lens ring light...
+		if makesmall: 
+			shellcmd('gm convert '+filename+'_'+suffix[i]+'.jpg -resize 1626x1080 -quality 75 '+filename+'_sm_'+suffix[i]+'.jpg')
 		if display: displayimage(screen, filename+'_'+suffix[i]+'.jpg', camerasize, cameraloc)
 		print 'time to display:', time.time()-start
 		if display: time.sleep(3)
