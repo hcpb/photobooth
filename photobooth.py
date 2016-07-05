@@ -2,6 +2,7 @@
 # many dependencies are all brought in with this import...
 from photoboothlib import *
 from random import randrange
+import commands
 
 #=============================================================================
 # ========================= COMMAND LINE ARGUMENTS ===========================
@@ -246,6 +247,10 @@ for element in loop:
 			print 'time to display:', time.time()-start
 			if display: 
 				displayimage(screen, filename+'_display'+tone+'.jpg', dispsize, disploc)
+				# the image won't display long on the NUC as compared to the MX6DQ
+				# so add an extra delay here when running on an Intel NUC...
+				a,b = commands.getstatusoutput('uname -a')
+				if 'x86' in b: time.sleep(7)
 
 	print '\r\nAll images done:', time.time()-start
 	time.sleep(1)
