@@ -261,9 +261,8 @@ for element in loop:
 
 	# move files (default) to redundant locations...
 	if move and not(regenerate):
-		move_files(filename, path='/media/SD4GB/', copy=True)
-		move_files(filename, path='/media/files-n-stuff/', copy=True)
-		move_files(filename, path='/media/PHOTOBOOTH/', copy=False)
+		move_files(filename, path='/media/dgd/PHOTOBOOTH/', copy=True)
+		move_files(filename, path='/var/www/html/photobooth/', copy=False)
 
 	if move and regenerate:
 		move_files(filename, path=location, copy=False)

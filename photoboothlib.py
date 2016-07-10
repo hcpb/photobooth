@@ -127,6 +127,8 @@ def move_files(filename, path='/media/PHOTOBOOTH/', copy=True):
 	print 'filename = ', filename
 	print cmd+'raw images...'
 	shellcmd(cmd+filename+'_[a-d].jpg '+path+'raw-images')
+	print cmd+'raw images...'
+	shellcmd(cmd+filename+'_sm_[a-d].jpg '+path+'for-tablet')
 	print cmd+'phone image...'
         shellcmd(cmd+filename+'_phone*.jpg '+path+'for-phone')
 	print cmd+'print images...'
