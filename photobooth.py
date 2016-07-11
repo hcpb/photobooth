@@ -205,7 +205,7 @@ for element in loop:
 		if display:
 			#showtext(screen, 'Image: '+str(i+1), 100)
 			displayimage(screen, 'images/image'+str(i+1)+'.jpg', size)
-			#time.sleep(0.75)
+			time.sleep(1.5)
 			blinklenslight()
 		print 
 		print 'Grabbing image: ', i+1
@@ -226,7 +226,7 @@ for element in loop:
 			shellcmd('gm convert '+filename+'_'+suffix[i]+'.jpg -resize 1626x1080 -quality 75 '+filename+'_sm_'+suffix[i]+'.jpg')
 			if display: time.sleep(2)
 		else:
-			if display: time.sleep(3)
+			if display: time.sleep(4)
 
 	# wait until all compositing threads are complete...
 	living=True
