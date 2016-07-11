@@ -178,10 +178,10 @@ for element in loop:
 
 	if display:
 		displayimage(screen, 'images/fourphotostaken-a.jpg', size)
-		time.sleep(2.5)
+		time.sleep(3)
 		fillscreen(screen, black)
                 displayimage(screen, 'images/fourphotostaken-b.jpg', size)
-                time.sleep(2.5)
+                time.sleep(3)
                 fillscreen(screen, black)
 
 
