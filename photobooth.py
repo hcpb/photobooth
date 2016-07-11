@@ -177,9 +177,13 @@ for element in loop:
 		fillscreen(screen, black)
 
 	if display:
-		displayimage(screen, 'images/fourphotostaken.jpg', size)
-		time.sleep(3.0)
+		displayimage(screen, 'images/fourphotostaken-a.jpg', size)
+		time.sleep(2.5)
 		fillscreen(screen, black)
+                displayimage(screen, 'images/fourphotostaken-b.jpg', size)
+                time.sleep(2.5)
+                fillscreen(screen, black)
+
 
 	# keep track of the starting time for some statistics...
 	start = time.time()
